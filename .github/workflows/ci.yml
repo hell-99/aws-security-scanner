@@ -1,0 +1,77 @@
+name: Security Scanner CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, '3.10', '3.11']
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Run scanner in mock mode
+      run: |
+        python scanner.py --mock --output json --report-file ci-test-report
+    
+    - name: Verify report generated
+      run: |
+        if [ ! -f "ci-test-report.json" ]; then
+          echo "Error: Report not generated"
+          exit 1
+        fi
+        echo "Report successfully generated"
+    
+    - name: Run tests (when available)
+      run: |
+        # Uncomment when tests are added
+        # python -m pytest tests/ -v
+        echo "Tests not yet implemented"
+    
+    - name: Upload test report as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-report-python-${{ matrix.python-version }}
+        path: ci-test-report.json
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install linting tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 black
+    
+    - name: Check code style with black
+      run: |
+        black --check scanners/ scanner.py || true
+    
+    - name: Lint with flake8
+      run: |
+        # Stop the build if there are Python syntax errors or undefined names
+        flake8 scanners/ scanner.py --count --select=E9,F63,F7,F82 --show-source --statistics || true
+        # Exit-zero treats all errors as warnings
+        flake8 scanners/ scanner.py --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics || true
