@@ -1,0 +1,145 @@
+{
+  "buckets": [
+    {
+      "name": "customer-data-backup",
+      "creation_date": "2024-01-15T10:30:00Z",
+      "public_access_block": {
+        "BlockPublicAcls": false,
+        "IgnorePublicAcls": false,
+        "BlockPublicPolicy": false,
+        "RestrictPublicBuckets": false
+      },
+      "acl": {
+        "grants": [
+          {
+            "grantee": {
+              "type": "Group",
+              "uri": "http://acs.amazonaws.com/groups/global/AllUsers"
+            },
+            "permission": "READ"
+          }
+        ]
+      },
+      "encryption": null,
+      "versioning": "Disabled",
+      "logging": false
+    },
+    {
+      "name": "internal-application-logs",
+      "creation_date": "2024-02-01T08:15:00Z",
+      "public_access_block": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": true,
+        "RestrictPublicBuckets": true
+      },
+      "acl": {
+        "grants": [
+          {
+            "grantee": {
+              "type": "CanonicalUser",
+              "id": "abc123"
+            },
+            "permission": "FULL_CONTROL"
+          }
+        ]
+      },
+      "encryption": {
+        "type": "AES256"
+      },
+      "versioning": "Enabled",
+      "logging": true
+    },
+    {
+      "name": "public-website-assets",
+      "creation_date": "2023-11-20T14:45:00Z",
+      "public_access_block": {
+        "BlockPublicAcls": false,
+        "IgnorePublicAcls": false,
+        "BlockPublicPolicy": false,
+        "RestrictPublicBuckets": false
+      },
+      "acl": {
+        "grants": [
+          {
+            "grantee": {
+              "type": "Group",
+              "uri": "http://acs.amazonaws.com/groups/global/AllUsers"
+            },
+            "permission": "READ"
+          }
+        ]
+      },
+      "encryption": null,
+      "versioning": "Disabled",
+      "logging": false,
+      "tags": [
+        {
+          "key": "Purpose",
+          "value": "public-website"
+        }
+      ]
+    },
+    {
+      "name": "company-financial-records",
+      "creation_date": "2024-01-05T09:00:00Z",
+      "public_access_block": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": false,
+        "RestrictPublicBuckets": false
+      },
+      "acl": {
+        "grants": [
+          {
+            "grantee": {
+              "type": "CanonicalUser",
+              "id": "def456"
+            },
+            "permission": "FULL_CONTROL"
+          }
+        ]
+      },
+      "bucket_policy": {
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::company-financial-records/*"
+          }
+        ]
+      },
+      "encryption": {
+        "type": "aws:kms",
+        "kms_key_id": "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+      },
+      "versioning": "Enabled",
+      "logging": false
+    },
+    {
+      "name": "development-test-data",
+      "creation_date": "2024-01-25T11:20:00Z",
+      "public_access_block": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": true,
+        "RestrictPublicBuckets": true
+      },
+      "acl": {
+        "grants": [
+          {
+            "grantee": {
+              "type": "CanonicalUser",
+              "id": "ghi789"
+            },
+            "permission": "FULL_CONTROL"
+          }
+        ]
+      },
+      "encryption": null,
+      "versioning": "Disabled",
+      "logging": false
+    }
+  ]
+}
