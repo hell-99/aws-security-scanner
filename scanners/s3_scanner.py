@@ -27,7 +27,11 @@ class S3Scanner:
     
     def load_mock_data(self) -> Dict[str, Any]:
         """Load mock S3 data from JSON file"""
-        with open('mock_data/s3_mock.json', 'r') as f:
+        import os
+        # Get the directory where the scanner is located
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        mock_file = os.path.join(base_dir, 'mock_data', 's3_mock.json')
+        with open(mock_file, 'r') as f:
             return json.load(f)
     
     def scan(self) -> List[Dict[str, Any]]:
